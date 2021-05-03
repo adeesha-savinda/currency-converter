@@ -4,7 +4,10 @@
   "description": "Converts value from one currency to another",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "docker-compose run --service-ports --rm cc_node yarn start:docker",
+    "start:docker": "cross-env NODE_ENV=dev nodemon --exec yarn nodeserver",
+    "start:local": "cross-env NODE_ENV=dev_local nodemon --exec yarn nodeserver",
+    "nodeserver": "node app.js"
   },
   "author": "Adeesha Savinda de Silva",
   "license": "MIT",
@@ -13,6 +16,7 @@
   },
   "dependencies": {
     "config": "^3.3.6",
+    "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "redis": "^3.1.2"
   }

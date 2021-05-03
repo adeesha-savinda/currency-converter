@@ -1,0 +1,20 @@
+version: '3'
+services:
+    cc_node:
+        container_name: 'cc_node'
+        image: node:14.16.1
+        volumes:
+            - ./:/app
+        working_dir: /app
+        user: 'node'
+        environment:
+            - NODE_ENV=dev
+        depends_on:
+            - cc_redis
+        ports:
+            - 4000:4000
+    cc_redis:
+        container_name: 'cc_redis'
+        image: redis
+        ports:
+            - '6381:6379'
