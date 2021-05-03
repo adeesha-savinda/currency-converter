@@ -1,14 +1,19 @@
 const express = require('express');
 const config = require('config');
+const bodyParser = require('body-parser');
 
 const redisConnection = require('./lib/redisConnection');
+const convertRoutes = require('./routes/convert');
 
 const app = express();
 const redisClient = redisConnection.init();
 
 const PORT = config.port;
 
-//CORS handling
+//body parser middleware
+app.use(bodyParser.json());
+
+//CORS handling middleware
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -27,6 +32,9 @@ app.get('/', (req, res, next) => {
         message: "Server is running!"
     });
 });
+
+//add the routes
+app.use('/convert', convertRoutes);
 
 //404 handler
 app.use((req, res, next) => {
