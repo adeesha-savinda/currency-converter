@@ -1,0 +1,19 @@
+{
+  "name": "CurrencyConverter",
+  "version": "1.0.0",
+  "description": "Converts value from one currency to another",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "Adeesha Savinda de Silva",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "config": "^3.3.6",
+    "express": "^4.17.1",
+    "redis": "^3.1.2"
+  }
+}
