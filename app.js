@@ -26,6 +26,12 @@ app.use((req, res, next) => {
     next();
 });
 
+//use a middleware to pass redisClient
+app.use((req, res, next) => {
+    req.redisClient = redisClient;
+    next();
+});
+
 //default route - states that the server is up and running
 app.get('/', (req, res, next) => {
     res.status(200).json({

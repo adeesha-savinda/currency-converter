@@ -4,24 +4,35 @@ const fixer = require('../constants/fixer');
 
 exports.convertCurrency = async (req, res, next) => {
     try {
-        const { API_KEY, url_latest } = fixer;
+        const { API_KEY, url } = fixer;
         const { fromCurrency, amount, toCurrency } = req.body;
-        const response = await axios.get(url_latest, {
-            params: {
-                access_key: API_KEY,
-                base: fromCurrency,
-                symbols: toCurrency
-            }
+
+        // const response = await axios.get(`${url}?access_key=${API_KEY}&from=${fromCurrency}&to=${toCurrency}&amount=${amount}`);
+
+        // // const response = await axios.get(`${url_la}?access_key=${API_KEY}&from=${fromCurrency}&to=${toCurrency}&amount=${amount}`);
+        // const { data } = response;
+
+        // // handle API error
+        // if (!data.success) {
+        //     const { error } = data;
+        //     return next(error);
+        // }
+
+        const data = {
+            info: { rate: 2 },
+            result: 150.00
+        };
+
+        //cache
+        await req.redisClient.hmset('last_cache', 'from_currency', fromCurrency, 'to_currency', toCurrency, 'rate', data.info.rate);
+        await req.redisClient.expire('last_cache', 86400);
+
+        //send the result
+        return res.status(200).json({
+            amount: data.result,
+            currency: toCurrency
         });
-        const { data } = response;
 
-        if (!data.success) {
-            const { error } = data;
-            next(error);
-        }
-
-        res.json(data);
-        console.log(data);
     } catch (error) {
         next(error);
     }
