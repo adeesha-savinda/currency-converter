@@ -7,21 +7,16 @@ exports.convertCurrency = async (req, res, next) => {
         const { API_KEY, url } = fixer;
         const { fromCurrency, amount, toCurrency } = req.body;
 
-        // const response = await axios.get(`${url}?access_key=${API_KEY}&from=${fromCurrency}&to=${toCurrency}&amount=${amount}`);
+        const response = await axios.get(`${url}?access_key=${API_KEY}&from=${fromCurrency}&to=${toCurrency}&amount=${amount}`);
 
-        // // const response = await axios.get(`${url_la}?access_key=${API_KEY}&from=${fromCurrency}&to=${toCurrency}&amount=${amount}`);
-        // const { data } = response;
+        // const response = await axios.get(`${url_la}?access_key=${API_KEY}&from=${fromCurrency}&to=${toCurrency}&amount=${amount}`);
+        const { data } = response;
 
-        // // handle API error
-        // if (!data.success) {
-        //     const { error } = data;
-        //     return next(error);
-        // }
-
-        const data = {
-            info: { rate: 2 },
-            result: 150.00
-        };
+        // handle API error
+        if (!data.success) {
+            const { error } = data;
+            return next(error);
+        }
 
         //cache
         await req.redisClient.hmset('last_cache', 'from_currency', fromCurrency, 'to_currency', toCurrency, 'rate', data.info.rate);
